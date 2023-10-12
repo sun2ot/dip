@@ -281,6 +281,122 @@ def histogram_eq(input_image, save_path: str, show: bool = False):
         it.compare_image_show(image, equalized_image)
 
 
+def linear_smoothing_filter(image, kernel_size, save_path: str, show: bool = False):
+    """
+    线性平滑滤波器
+    :param kernel_size: 滤波器大小(太大会很慢很慢,推荐3-5)
+    """
+    width, height = image.size
+    border = kernel_size // 2
+
+    smoothed_image = Image.new('RGB', (width, height))
+
+    for x in range(border, width - border):
+        for y in range(border, height - border):
+            region_r, region_g, region_b = [], [], []
+            for i in range(-border, border + 1):
+                for j in range(-border, border + 1):
+                    pixel_r, pixel_g, pixel_b = image.getpixel((x + i, y + j))
+                    region_r.append(pixel_r)
+                    region_g.append(pixel_g)
+                    region_b.append(pixel_b)
+            average_r = sum(region_r) // len(region_r)
+            average_g = sum(region_g) // len(region_g)
+            average_b = sum(region_b) // len(region_b)
+            smoothed_image.putpixel((x, y), (average_r, average_g, average_b))
+    it.save_image(smoothed_image, save_path)
+    print('线性平滑滤波器成功')
+    if show:
+        it.compare_image_show(image, smoothed_image)
+
+
+def middle_smoothing_filter(image, kernel_size, save_path: str, show: bool = False):
+    """
+    中值滤波器成功
+    """
+    width, height = image.size
+    smoothed_image = Image.new('RGB', (width, height))
+    filter_radius = kernel_size // 2
+
+    # 遍历图像的每个像素
+    for x in range(width):
+        for y in range(height):
+            red_values, green_values, blue_values = [], [], []
+
+            # 遍历滤波器窗口内的像素
+            for i in range(-filter_radius, filter_radius + 1):
+                for j in range(-filter_radius, filter_radius + 1):
+                    pixel_x = x + i
+                    pixel_y = y + j
+
+                    # 检查像素是否在图像范围内
+                    if 0 <= pixel_x < width and 0 <= pixel_y < height:
+                        pixel = image.getpixel((pixel_x, pixel_y))
+                        red_values.append(pixel[0])
+                        green_values.append(pixel[1])
+                        blue_values.append(pixel[2])
+
+            # 计算中值
+            median_color = (
+                sorted(red_values)[len(red_values) // 2],
+                sorted(green_values)[len(green_values) // 2],
+                sorted(blue_values)[len(blue_values) // 2]
+            )
+
+            # 在新图像中设置中值后的像素
+            smoothed_image.putpixel((x, y), median_color)
+
+    it.save_image(smoothed_image, save_path)
+    print('中值滤波器成功')
+    if show:
+        it.compare_image_show(image, smoothed_image)
+
+
+def sharpen_filter(image, save_path: str, show: bool = False, order: int = 1):
+    """
+    一阶微分锐化滤波器
+    """
+
+    if order not in (1, 2):
+        raise ValueError('只能一/二阶')
+
+    width, height = image.size
+    # 获取图像像素数据
+    pixels = image.load()
+
+    if order == 1:
+        sharp_image_1st = Image.new("RGB", (width, height))
+        pixels_1st = sharp_image_1st.load()
+        # 一阶微分锐化滤波器
+        for y in range(1, height - 1):
+            for x in range(1, width - 1):
+                r = pixels[x + 1, y][0] - pixels[x - 1, y][0]
+                g = pixels[x + 1, y][1] - pixels[x - 1, y][1]
+                b = pixels[x + 1, y][2] - pixels[x - 1, y][2]
+                pixels_1st[x, y] = (r, g, b)
+        it.save_image(sharp_image_1st, save_path)
+        print('一阶微分锐化成功')
+        if show:
+            it.compare_image_show(image, sharp_image_1st)
+
+    elif order == 2:
+        sharp_image_2nd = Image.new("RGB", (width, height))
+        pixels_2nd = sharp_image_2nd.load()
+        # 二阶微分锐化滤波器
+        for y in range(1, height - 1):
+            for x in range(1, width - 1):
+                r = 5 * pixels[x, y][0] - pixels[x - 1, y][0] - pixels[x + 1, y][0] - pixels[x, y - 1][0] - \
+                    pixels[x, y + 1][0]
+                g = 5 * pixels[x, y][1] - pixels[x - 1, y][1] - pixels[x + 1, y][1] - pixels[x, y - 1][1] - \
+                    pixels[x, y + 1][1]
+                b = 5 * pixels[x, y][2] - pixels[x - 1, y][2] - pixels[x + 1, y][2] - pixels[x, y - 1][2] - \
+                    pixels[x, y + 1][2]
+                pixels_2nd[x, y] = (r, g, b)
+        it.save_image(sharp_image_2nd, save_path)
+        print('二阶微分锐化成功')
+        if show:
+            it.compare_image_show(image, sharp_image_2nd)
+
 
 
 
@@ -306,4 +422,9 @@ if __name__ == "__main__":
     # image_cal1(img1, img2, save_path, 'divide', True)
     # image_cal2(input_image, save_path, True)
     # image_cal3(img1, img2, save_path, '^', True)
-    histogram_eq(input_image, save_path, True)
+
+    # histogram_eq(input_image, save_path, True)
+
+    # linear_smoothing_filter(input_image, 3, save_path, True)
+    # middle_smoothing_filter(input_image, 3, save_path, True)
+    sharpen_filter(input_image, save_path, True, 1)

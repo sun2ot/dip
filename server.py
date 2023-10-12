@@ -6,6 +6,7 @@ import time
 import os
 import ImageTools as it
 from exam1 import quantize_image
+import exam2 as e2
 
 
 app = Flask(__name__)
