@@ -9,7 +9,6 @@ def point_op_reverse(input_image, save_path: str, show: bool = False):
     :param input_image: 待处理图片
     :param save_path: 处理后图片路径
     :param show: 是否显示处理前后对比图
-    :return: void
     """
 
     # 获取图像的宽度和高度
@@ -34,6 +33,7 @@ def point_op_reverse(input_image, save_path: str, show: bool = False):
     if show:
         it.compare_image_show(input_image, reversed_image)
 
+    return reversed_image
 
 def point_op_log(input_image, save_path: str, c: float = 1.0, show: bool = False):
     """

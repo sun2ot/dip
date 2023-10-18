@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 def read_image(file_path):
     """
@@ -77,3 +78,7 @@ def restore255_image(image):
         channels.append(result)
     norm_image = Image.fromarray(np.dstack(channels))
     return norm_image
+
+
+def gen_timestamp_name():
+    return str(time.time()).split('.')[0]
