@@ -29,7 +29,8 @@ def process_image():
         image = Image.open(image_bytes)
         uploaded_image2 = None
         image2 = None
-        if request.files['image2']:
+        if len(request.files) == 2:
+            print('has 2 images')
             uploaded_image2 = request.files['image2']
             image_bytes2 = BytesIO(uploaded_image2.read())
             image2 = Image.open(image_bytes2)
@@ -58,36 +59,45 @@ def process_image():
             e2.point_op_reverse(image, save_path)
         elif fid == 3:
             # 对数变换
-            c = float(request.form['c'])
+            c = float(request.form['input1'])
             print(f'c: {c}')
             e2.point_op_log(image, save_path, c)
         elif fid == 4:
             # 幂次变换
-            c = float(request.form['c'])
-            gamma = float(request.form['gamma'])
+            c = float(request.form['input1'])
+            gamma = float(request.form['input2'])
             print(f'c: {c}, gamma: {gamma}')
             e2.point_op_powertrans(image, save_path, c, gamma)
         elif fid == 5:
             # 对比度拉伸
-            min = int(request.form['min'])
-            max = int(request.form['max'])
+            min = int(request.form['input1'])
+            max = int(request.form['input2'])
             print(f'min: {min}, max: {max}')
             e2.point_op_contrast_stretching(image, save_path, min, max)
         elif fid == 6:
             # 灰度级切片
-            min = int(request.form['min'])
-            max = int(request.form['max'])
+            min = int(request.form['input1'])
+            max = int(request.form['input2'])
             print(f'min: {min}, max: {max}')
             e2.point_op_gray_slice(image, save_path, min, max)
         elif fid == 7:
             # 位平面切片
-            bit = int(request.form['bit'])
+            bit = int(request.form['input1'])
             print(f'bit: {bit}')
             e2.point_op_bitplane_slice(image, save_path, bit)
         elif fid == 8:
             # 代数运算：加减乘除
-            op = request.form['op']
+            op = request.form['input1']
+            print(f'op: {op}')
             e2.image_cal1(image, image2, save_path, op)
+        elif fid == 9:
+            # 代数运算：非运算
+            e2.image_cal2(image, save_path)
+        elif fid == 10:
+            # 代数运算：与、或、异或运算
+            op = request.form['input1']
+            print(f'op: {op}')
+            e2.image_cal3(image, image2, save_path, op)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧

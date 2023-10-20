@@ -24,7 +24,8 @@ def point_op_reverse(input_image, save_path: str, show: bool = False):
             reversed_r = 255 - r
             reversed_g = 255 - g
             reversed_b = 255 - b
-            reversed_image.putpixel((x, y), (reversed_r, reversed_g, reversed_b))
+            reversed_image.putpixel(
+                (x, y), (reversed_r, reversed_g, reversed_b))
 
     it.save_image(reversed_image, save_path)
     print('反转成功')
@@ -35,6 +36,7 @@ def point_op_reverse(input_image, save_path: str, show: bool = False):
 
     return reversed_image
 
+
 def point_op_log(input_image, save_path: str, c: float = 1.0, show: bool = False):
     """
     点运算2-对数变换
@@ -43,9 +45,15 @@ def point_op_log(input_image, save_path: str, c: float = 1.0, show: bool = False
     input_array = np.array(input_image)
 
     # rgb 三通道
-    log_transformed_r = c * np.log(np.where(input_array[:, :, 0] < 255, input_array[:, :, 0] + 1, 1))  # 红色通道
-    log_transformed_g = c * np.log(np.where(input_array[:, :, 1] < 255, input_array[:, :, 1] + 1, 1))  # 绿色通道
-    log_transformed_b = c * np.log(np.where(input_array[:, :, 2] < 255, input_array[:, :, 2] + 1, 1))  # 蓝色通道
+    log_transformed_r = c * \
+        np.log(np.where(input_array[:, :, 0] < 255,
+               input_array[:, :, 0] + 1, 1))  # 红色通道
+    log_transformed_g = c * \
+        np.log(np.where(input_array[:, :, 1] < 255,
+               input_array[:, :, 1] + 1, 1))  # 绿色通道
+    log_transformed_b = c * \
+        np.log(np.where(input_array[:, :, 2] < 255,
+               input_array[:, :, 2] + 1, 1))  # 蓝色通道
 
     # 将像素值缩放到 0-255 范围（必选） ，否则是黑图，因为都是小像素值
     log_transformed_r = it.restore255(log_transformed_r)
@@ -54,7 +62,8 @@ def point_op_log(input_image, save_path: str, c: float = 1.0, show: bool = False
 
     # 合并通道并创建对数变换后的 RGB 图像
     # np.dstack 沿着 deep(第三维度) 堆叠
-    log_transformed_image = Image.fromarray(np.dstack((log_transformed_r, log_transformed_g, log_transformed_b)))
+    log_transformed_image = Image.fromarray(
+        np.dstack((log_transformed_r, log_transformed_g, log_transformed_b)))
     it.save_image(log_transformed_image, save_path)
     print('对数变换成功')
 
@@ -92,7 +101,8 @@ def point_op_contrast_stretching(input_image, save_path: str, min_pixel: int, ma
     channels = []  # 变换后的三通道数组
     for channel in range(3):
         # 执行对比度拉伸
-        result = np.interp(input_array[:, :, channel], (0, 255), (min_pixel, max_pixel)).astype(np.uint8)
+        result = np.interp(
+            input_array[:, :, channel], (0, 255), (min_pixel, max_pixel)).astype(np.uint8)
         channels.append(result)
     contrast_stretching_image = Image.fromarray(np.dstack(channels))
     it.save_image(contrast_stretching_image, save_path)
@@ -167,7 +177,8 @@ def image_cal1(image1, image2, save_path: str, op: str, show: bool = False):
 
     # 检查 operation 参数是否合法
     if op not in ('add', 'subtract', 'multiply', 'divide'):
-        raise ValueError("非法操作! 仅支持 'add', 'subtract', 'multiply' and 'divide'")
+        raise ValueError(
+            "非法操作! 仅支持 'add', 'subtract', 'multiply' and 'divide'")
 
     result_image = Image.new('RGB', image1.size)
     new_pixel = np.zeros(result_image.size)
@@ -210,7 +221,6 @@ def image_cal2(image, save_path: str, show: bool = False):
     代数运算：非运算
     """
     input_array = np.array(image)
-    print(input_array.shape)
     channels = []
     for channel in range(3):
         result = 255 - input_array[:, :, channel]
@@ -225,7 +235,7 @@ def image_cal2(image, save_path: str, show: bool = False):
 
 def image_cal3(image1, image2, save_path: str, op: str, show: bool = False):
     """
-    与、或运算
+    与、或、异或运算
     """
     # 确保两个图像具有相同的大小
     if image1.size != image2.size:
@@ -272,7 +282,8 @@ def histogram_eq(input_image, save_path: str, show: bool = False):
     cdf_normalized = cdf * histogram.max() / cdf.max()
 
     # 使用CDF重新映射像素值
-    equalized_image = np.interp(image, bins[:-1], cdf_normalized).astype(np.uint8)
+    equalized_image = np.interp(
+        image, bins[:-1], cdf_normalized).astype(np.uint8)
     equalized_image = Image.fromarray(equalized_image)
 
     it.save_image(equalized_image, save_path)
@@ -396,8 +407,6 @@ def sharpen_filter(image, save_path: str, show: bool = False, order: int = 1):
         print('二阶微分锐化成功')
         if show:
             it.compare_image_show(image, sharp_image_2nd)
-
-
 
 
 if __name__ == "__main__":
