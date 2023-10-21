@@ -98,6 +98,24 @@ def process_image():
             op = request.form['input1']
             print(f'op: {op}')
             e2.image_cal3(image, image2, save_path, op)
+        elif fid == 11:
+            # 直方图均衡化
+            e2.histogram_eq(image, save_path)
+        elif fid == 12:
+            # 线性平滑滤波器
+            kernel_size = int(request.form['input1'])
+            print(f'kernel_size: {kernel_size}')
+            e2.linear_smoothing_filter(image, kernel_size, save_path)
+        elif fid == 13:
+            # 中值滤波器
+            kernel_size = int(request.form['input1'])
+            print(f'kernel_size: {kernel_size}')
+            e2.middle_smoothing_filter(image, kernel_size, save_path)
+        elif fid == 14:
+            # 锐化滤波器
+            order = int(request.form['input1'])
+            print(f'order: {order}')
+            e2.sharpen_filter(image, save_path, order)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧

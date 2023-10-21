@@ -269,7 +269,9 @@ def image_cal3(image1, image2, save_path: str, op: str, show: bool = False):
 
 
 def histogram_eq(input_image, save_path: str, show: bool = False):
-
+    """
+    直方图均衡化
+    """
     input_image = input_image.convert('L')
 
     image = np.array(input_image)  # 这里假设你有一张灰度图像
@@ -323,7 +325,7 @@ def linear_smoothing_filter(image, kernel_size, save_path: str, show: bool = Fal
 
 def middle_smoothing_filter(image, kernel_size, save_path: str, show: bool = False):
     """
-    中值滤波器成功
+    中值滤波器
     """
     width, height = image.size
     smoothed_image = Image.new('RGB', (width, height))
@@ -363,7 +365,7 @@ def middle_smoothing_filter(image, kernel_size, save_path: str, show: bool = Fal
         it.compare_image_show(image, smoothed_image)
 
 
-def sharpen_filter(image, save_path: str, show: bool = False, order: int = 1):
+def sharpen_filter(image, save_path: str, order: int = 1, show: bool = False):
     """
     一阶微分锐化滤波器
     """
