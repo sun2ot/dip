@@ -6,6 +6,7 @@ import os
 import ImageTools as it
 from exam1 import quantize_image
 import exam2 as e2
+import exam3 as e3
 
 
 app = Flask(__name__)
@@ -116,6 +117,9 @@ def process_image():
             order = int(request.form['input1'])
             print(f'order: {order}')
             e2.sharpen_filter(image, save_path, order)
+        elif fid == 15:
+            # rgb转cmy
+            e3.rgb_cmy(image, save_path)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
@@ -124,7 +128,7 @@ def process_image():
                         'save_path': base_url + save_path}), 200
 
     except Exception as e:
-        print('server error:\n', e)
+        print('-----server error-----\n', e)
         return jsonify({'error': str(e)}), 500
 
 
