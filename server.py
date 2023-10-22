@@ -118,8 +118,19 @@ def process_image():
             print(f'order: {order}')
             e2.sharpen_filter(image, save_path, order)
         elif fid == 15:
-            # rgb转cmy
-            e3.rgb_cmy(image, save_path)
+            e3.rgb2cmy(image, save_path)
+        elif fid == 16:
+            e3.rgb2hsi(image, save_path)
+        elif fid == 17:
+            e3.rgb2yuv(image, save_path)
+        elif fid == 18:
+            e3.rgb2ycbcr(image, save_path)
+        elif fid == 19:
+            e3.com_color(image, save_path)
+        elif fid == 20:
+            alpha = int(request.form['input1'])
+            beta = int(request.form['input2'])
+            e3.grayscale_transform(image, alpha, beta, save_path)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧

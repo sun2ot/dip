@@ -127,6 +127,48 @@ def rgb2ycbcr(image, save_path, show: bool = False):
     return ycbcr_image
 
 
+def com_color(image, save_path, show: bool = False):
+    """
+    RGB 补色
+    """
+    image_array = np.array(image)
+    com_image_array = 255 - image_array
+    com_image = Image.fromarray(com_image_array)
+
+    it.save_image(com_image, save_path)
+    print('RGB 补色成功')
+    if show:
+        it.compare_image_show(image, com_image)
+
+    return com_image
+
+
+def grayscale_transform(image, alpha, beta, save_path, show: bool = False):
+    """
+    灰度变换-线性
+    > 你说为什么不做其他几种变换？拜托，这就是个课程作业而已......
+    """
+    gray_image = image.convert('L')
+    image_array = np.array(gray_image)
+    width, height = gray_image.size
+
+    for i in range(height):
+        for j in range(width):
+            if alpha * image_array[i][j] + beta > 255:
+                image_array[i][j] = 255
+            else:
+                image_array[i][j] = alpha * image_array[i][j] + beta
+
+    gray_image = Image.fromarray(image_array)
+
+    it.save_image(gray_image, save_path)
+    print('线性灰度变换成功')
+    if show:
+        it.compare_image_show(image, gray_image)
+
+    return gray_image
+
+
 if __name__ == "__main__":
     image = it.read_image('static/image_in/nana.jpg')
     save_path = 'static/image_out/' + it.gen_timestamp_name() + '.jpg'
@@ -134,4 +176,7 @@ if __name__ == "__main__":
     # rgb2cmy(image, save_path, show=True)
     # rgb2hsi(image, save_path, show=True)
     # rgb2yuv(image, save_path, show=True)
-    rgb2ycbcr(image, save_path, show=True)
+    # rgb2ycbcr(image, save_path, show=True)
+    # com_color(image, save_path, True)
+
+    # grayscale_transform(image, 0.5, 5, save_path, True)
