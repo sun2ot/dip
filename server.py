@@ -7,6 +7,7 @@ import ImageTools as it
 from exam1 import quantize_image
 import exam2 as e2
 import exam3 as e3
+import exam4 as e4
 
 
 app = Flask(__name__)
@@ -118,6 +119,7 @@ def process_image():
             print(f'order: {order}')
             e2.sharpen_filter(image, save_path, order)
         elif fid == 15:
+            # 以下四个为彩色空间变换
             e3.rgb2cmy(image, save_path)
         elif fid == 16:
             e3.rgb2hsi(image, save_path)
@@ -126,11 +128,19 @@ def process_image():
         elif fid == 18:
             e3.rgb2ycbcr(image, save_path)
         elif fid == 19:
+            # 补色
             e3.com_color(image, save_path)
         elif fid == 20:
+            # 灰度变换
             alpha = int(request.form['input1'])
             beta = int(request.form['input2'])
             e3.grayscale_transform(image, alpha, beta, save_path)
+        elif fid == 21:
+            # 傅里叶变换
+            e4.fourier_transform(image, save_path)
+        elif fid == 22:
+            # 快速傅里叶变换
+            e4.fast_fourier_transform(image, save_path)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧

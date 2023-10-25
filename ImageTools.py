@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+
 def read_image(file_path):
     """
     读取图像文件并返回图像对象
@@ -14,6 +15,7 @@ def read_image(file_path):
     except Exception as e:
         print(f'图片读取出错：\n{e}')
 
+
 def save_image(image, file_path):
     """
     保存图像对象到指定文件路径
@@ -23,6 +25,7 @@ def save_image(image, file_path):
         image.save(file_path)
     except Exception as e:
         print(f'图片保存出错：\n{e}')
+
 
 def compare_image_show(origin, processed):
     # 显示原始图像和处理后的图像
@@ -38,6 +41,7 @@ def compare_image_show(origin, processed):
 
     # 显示图像
     plt.show()
+
 
 def algebraic_op_show(origin1, origin2, processed):
     # 显示进行代数运算的原始图像和处理后的图像
@@ -59,13 +63,16 @@ def algebraic_op_show(origin1, origin2, processed):
     # 显示图像
     plt.show()
 
+
 def restore255(pixels):
     """
     将像素值缩放到 0-255 范围
     :param pixels: 图片的像素矩阵
     """
-    pixels = ((pixels - np.min(pixels)) / (np.max(pixels) - np.min(pixels) + 0.1) * 255).astype(np.uint8)
+    pixels = ((pixels - np.min(pixels)) / (np.max(pixels) -
+              np.min(pixels) + 0.1) * 255).astype(np.uint8)
     return pixels
+
 
 def restore255_image(image):
     """
@@ -82,3 +89,14 @@ def restore255_image(image):
 
 def gen_timestamp_name():
     return str(time.time()).split('.')[0]
+
+
+def fromarray(array):
+    return Image.fromarray(array)
+
+
+def l_array(image):
+    """
+    将图像转为灰度后返回其矩阵
+    """
+    return np.array(image.convert("L"), dtype=float)
