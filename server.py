@@ -8,6 +8,7 @@ from exam1 import quantize_image
 import exam2 as e2
 import exam3 as e3
 import exam4 as e4
+import exam5 as e5
 
 
 app = Flask(__name__)
@@ -141,6 +142,22 @@ def process_image():
         elif fid == 22:
             # 快速傅里叶变换
             e4.fast_fourier_transform(image, save_path)
+        elif fid == 23:
+            # 理想低通滤波器
+            cf = int(request.form['input1'])
+            e5.ideal_lowpass_filter(image, cf, save_path)
+        elif fid == 24:
+            # 巴特沃斯低通滤波器
+            cf = int(request.form['input1'])
+            order = int(request.form['input2'])
+            e5.butterworth_lowpass_filter(image, cf, order, save_path)
+        elif fid == 25:
+            # 高通滤波器
+            D = int(request.form['input1'])
+            e5.ideal_highpass_filter(image, D, save_path)
+        elif fid == 26:
+            # 拉普拉斯滤波器
+            e5.laplace_filter(image, save_path)
         else:
             raise Exception('no function')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
