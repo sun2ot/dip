@@ -145,21 +145,23 @@ def process_image():
         elif fid == 23:
             # 理想低通滤波器
             cf = int(request.form['input1'])
-            e5.ideal_lowpass_filter(image, cf, save_path)
+            e5.ideal_low_filter(image, cf, save_path)
         elif fid == 24:
             # 巴特沃斯低通滤波器
             cf = int(request.form['input1'])
             order = int(request.form['input2'])
-            e5.butterworth_lowpass_filter(image, cf, order, save_path)
+            e5.butterworth_low_filter(image, cf, order, save_path)
         elif fid == 25:
-            # 高通滤波器
-            D = int(request.form['input1'])
-            e5.ideal_highpass_filter(image, D, save_path)
+            # 理想高通滤波器
+            cf = int(request.form['input1'])
+            e5.ideal_high_filter(image, cf, save_path)
         elif fid == 26:
-            # 拉普拉斯滤波器
-            e5.laplace_filter(image, save_path)
+            # Butterworth高通滤波器
+            cf = int(request.form['input1'])
+            order = int(request.form['input2'])
+            e5.butterworth_high_filter(image, cf, order, save_path)
         else:
-            raise Exception('no function')
+            raise Exception('no function mapped')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
         base_url = 'http://localhost:5000/'
         return jsonify({'success': 'image processed',
