@@ -9,6 +9,7 @@ import exam2 as e2
 import exam3 as e3
 import exam4 as e4
 import exam5 as e5
+import exam6 as e6
 
 
 app = Flask(__name__)
@@ -160,6 +161,57 @@ def process_image():
             cf = int(request.form['input1'])
             order = int(request.form['input2'])
             e5.butterworth_high_filter(image, cf, order, save_path)
+        elif fid == 27:
+            # 添加高斯噪声
+            mean = int(request.form['input1'])
+            std = int(request.form['input2'])
+            e6.add_gaussian_noise(image, save_path, mean, std)
+        elif fid == 28:
+            # 添加椒盐噪声
+            salt_prob = float(request.form['input1'])
+            pepper_prob = float(request.form['input2'])
+            e6.add_salt_and_pepper_noise(
+                image, save_path, salt_prob, pepper_prob)
+        elif fid == 29:
+            # 添加波动噪声
+            intensity = int(request.form['input1'])
+            e6.add_uniform_noise(image, save_path, intensity)
+        elif fid == 30:
+            # 算术均值滤波器
+            kernel_size = int(request.form['input1'])
+            e6.ArithmeticMean_filter(image, kernel_size, save_path)
+        elif fid == 31:
+            # 中值滤波器
+            kernel_size = int(request.form['input1'])
+            e6.Median_filter(image, kernel_size, save_path)
+        elif fid == 32:
+            # 高斯滤波器
+            kernel_size = int(request.form['input1'])
+            sigma = int(request.form['input2'])
+            e6.Gaussian_filter(image, kernel_size, sigma, save_path)
+        elif fid == 33:
+            # 最大值滤波器
+            kernel_size = int(request.form['input1'])
+            e6.Max_filter(image, kernel_size, save_path)
+        elif fid == 34:
+            # 最小值滤波器
+            kernel_size = int(request.form['input1'])
+            e6.Min_filter(image, kernel_size, save_path)
+        elif fid == 35:
+            # 带阻滤波器
+            center_frequency = int(request.form['input1'])
+            bandwidth = int(request.form['input2'])
+            e6.bandstop_filter(image, center_frequency, bandwidth, save_path)
+        elif fid == 36:
+            # 带通滤波器
+            low_frequency = int(request.form['input1'])
+            high_frequency = int(request.form['input2'])
+            e6.bandpass_filter(image, low_frequency, high_frequency, save_path)
+        elif fid == 37:
+            # 陷波滤波器
+            center_frequency = int(request.form['input1'])
+            bandwidth = int(request.form['input2'])
+            e6.notch_filter(image, center_frequency, bandwidth, save_path)
         else:
             raise Exception('no function mapped')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
