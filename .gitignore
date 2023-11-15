@@ -2,3 +2,5 @@
 /static
 __pycache__
 ttt.py
+*.jpg
+*.png
