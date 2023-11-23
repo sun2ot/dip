@@ -4,3 +4,4 @@ __pycache__
 ttt.py
 *.jpg
 *.png
+/*.ipynb
