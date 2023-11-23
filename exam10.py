@@ -54,7 +54,7 @@ def get_chain_code(img):
         # Check if we have returned to the starting point
         if current_position == start_point:
             break
-
+    print('链码计算完成')
     return chain_code
 
 
@@ -140,11 +140,6 @@ def region_skeleton(image, save_path, show: bool=False):
         it.compare_image_show(image, skeleton_img)
     it.save_image(skeleton_img, save_path)
     print('骨架化完成！')
-
-
-def save_skeleton_image(skeleton, output_path):
-    skeleton_img = Image.fromarray(skeleton)
-    skeleton_img.save(output_path)
 
 
 # --------------------------------------------------

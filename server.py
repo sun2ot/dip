@@ -10,6 +10,11 @@ import exam3 as e3
 import exam4 as e4
 import exam5 as e5
 import exam6 as e6
+import exam7 as e7
+import exam8 as e8
+import exam9 as e9
+import exam10 as e10
+import exam11 as e11
 
 
 app = Flask(__name__)
@@ -212,7 +217,72 @@ def process_image():
             center_frequency = int(request.form['input1'])
             bandwidth = int(request.form['input2'])
             e6.notch_filter(image, center_frequency, bandwidth, save_path)
-        # todo: 返回文本的函数，直接在if-else内部return即可，文本字段关键字设为result
+        elif fid == 38:
+            # 哈夫曼编码
+            e7.huffman_process(image, save_path)
+        elif fid == 39:
+            # LZW编码
+            e7.lzw_process(image, save_path)
+        elif fid == 40:
+            # 有损压缩1
+            pass
+        elif fid == 41:
+            # 有损压缩2
+            pass
+        elif fid == 42:
+            # 膨胀操作
+            e8.dilate(image, save_path)
+        elif fid == 43:
+            # 腐蚀操作
+            e8.erode(image, save_path)
+        elif fid == 44:
+            # 开操作
+            e8.open(image, save_path)
+        elif fid == 45:
+            # 闭操作
+            e8.close(image, save_path)
+        elif fid == 46:
+            # 边界提取
+            e8.boundary_extract(image, save_path)
+        elif fid == 47:
+            # 区域填充
+            e8.region_fill(image, save_path)
+        elif fid == 48:
+            # 灰度不连续分割
+            e9.rgb_image_segmentation1(image, save_path)
+        elif fid == 49:
+            # 基于像素阈值的分割
+            e9.rgb_image_segmentation2(image, save_path)
+        elif fid == 50:
+            # 区域生长
+            e9.region_growing(image, save_path)
+        elif fid == 51:
+            # sobel算子边缘检测
+            e9.sobel_edge_detection(image, save_path)
+        elif fid == 52:
+            # prewitt算子边缘检测
+            e9.prewitt_edge_detection(image, save_path)
+        elif fid == 53:
+            # 链码表示
+            chain_code = e10.get_chain_code(image)
+            return jsonify({'success': 'image processed',
+                'result': chain_code}), 200
+        elif fid == 54:
+            # 多边形近似
+            num_vertices = int(request.form['input1'])
+            e10.polygon_approximation(image, num_vertices, save_path)
+        elif fid == 55:
+            # 区域骨架
+            e10.region_skeleton(image, save_path)
+        elif fid == 56:
+            # 边界描述
+            perimeter, diameter = e10.calculate_boundary(image)
+            result = f'边界周长: {perimeter} 边界直径: {diameter}'
+            return jsonify({'success': 'image processed',
+                'result': result}), 200
+        elif fid == 57:
+            # 图像检索
+            e11.main(image, save_path)
         else:
             raise Exception('no function mapped')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
