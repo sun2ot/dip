@@ -212,6 +212,7 @@ def process_image():
             center_frequency = int(request.form['input1'])
             bandwidth = int(request.form['input2'])
             e6.notch_filter(image, center_frequency, bandwidth, save_path)
+        # todo: 返回文本的函数，直接在if-else内部return即可，文本字段关键字设为result
         else:
             raise Exception('no function mapped')
         # flask 的静态资源目录 本地嘛 就这条件 凑合吧
