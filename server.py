@@ -224,11 +224,11 @@ def process_image():
             # LZW编码
             e7.lzw_process(image, save_path)
         elif fid == 40:
-            # 有损压缩1
-            pass
+            # DCT有损压缩
+            e7.dct_process(image, save_path)
         elif fid == 41:
-            # 有损压缩2
-            pass
+            # DFT有损压缩
+            e7.dft_process(image, save_path)
         elif fid == 42:
             # 膨胀操作
             e8.dilate(image, save_path)
