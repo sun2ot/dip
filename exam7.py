@@ -1,8 +1,11 @@
 from PIL import Image
+import cv2
+from io import BytesIO
 import numpy as np
 from collections import Counter
 from heapq import heappush, heappop, heapify
 import ImageTools as it
+import matplotlib.pyplot as plt
 
 
 def build_huffman_tree(freq):
@@ -57,8 +60,7 @@ def huffman_process(image, save_path, show: bool=False):
     it.save_image(decoded_image, save_path)
     if show:
         it.compare_image_show(image, decoded_image)
-
-
+    print('哈夫曼编码压缩完成')
 
 def lzw_compression(image):
     """
@@ -137,15 +139,80 @@ def lzw_process(image, save_path, show: bool=False):
 
     if show:
         it.compare_image_show(image, decompressed_img)
+    print('LZW 压缩完成')
+
+
+def dct(img):
+    M, N = img.shape
+    result = np.zeros_like(img, dtype=float)
+
+    u = np.arange(M).reshape(M, 1)
+    v = np.arange(N).reshape(1, N)
+
+    cu = np.sqrt(2) / 2 * np.ones_like(u)
+    cu[0] = 1
+
+    cv = np.sqrt(2) / 2 * np.ones_like(v)
+    cv[:, 0] = 1
+
+    for i in range(M):
+        for j in range(N):
+            result[i, j] = np.sum(img * cu * cv * np.cos((2 * i + 1) * u * np.pi / (2 * M)) * np.cos(
+                (2 * j + 1) * v * np.pi / (2 * N)
+            ))
+
+    return result
+
+def idct(coefficients):
+    M, N = coefficients.shape
+    result = np.zeros_like(coefficients, dtype=float)
+
+    u = np.arange(M).reshape(M, 1)
+    v = np.arange(N).reshape(1, N)
+
+    cu = np.sqrt(2) / 2 * np.ones_like(u)
+    cu[0] = 1
+
+    cv = np.sqrt(2) / 2 * np.ones_like(v)
+    cv[:, 0] = 1
+
+    for i in range(M):
+        for j in range(N):
+            result[i, j] = np.sum(cu * cv * coefficients * np.cos((2 * i + 1) * u * np.pi / (2 * M)) * np.cos(
+                (2 * j + 1) * v * np.pi / (2 * N)
+            ))
+
+    return result
+
+
+def dct_process(image, save_path, show: bool=False):
+    # 确保格式为RGB
+    image = image.convert('RGB')
+    image_array = np.array(image)
+    # 转换为灰度图
+    img_gray = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY).astype('float')
+    # DCT
+    coefficients = dct(img_gray)
+    # 进行log处理
+    coefficients_log = np.log(abs(coefficients))
+    # IDCT
+    img_reconstructed = idct(coefficients)
+    # it.look_nparray(img_reconstructed)
+
+    result = it.fromarray(it.restore255(img_reconstructed))
+    if show:
+        it.compare_image_show(image, result)
+    it.save_image(result, save_path)
+    print('DCT 压缩完成')
+
 
 
 if __name__ == "__main__":
 
-    image = it.read_image('static/image_in/nana.jpg')
+    image = it.read_image('static/image_in/grape_small.jpg')
     save_path = 'static/image_out/' + it.gen_timestamp_name() + '.jpg'
 
     # huffman_process(image, save_path, show=True)
-    lzw_process(image, save_path, show=True)
+    # lzw_process(image, save_path, show=True)
 
-
-    # todo
+    dct_process(image, save_path, show=True)

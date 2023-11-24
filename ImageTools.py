@@ -100,3 +100,10 @@ def l_array(image):
     将图像转为灰度后返回其矩阵
     """
     return np.array(image.convert("L"), dtype=float)
+
+
+def look_nparray(nparray):
+    print(type(object))
+    print(object.shape)
+    print(object.dtype)
+    print(object)
