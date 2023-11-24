@@ -206,6 +206,42 @@ def dct_process(image, save_path, show: bool=False):
     print('DCT 压缩完成')
 
 
+# -------------------------------------------------
+
+# 定义离散傅里叶变换
+def dft(x):
+    N = len(x)
+    n = np.arange(N)
+    k = n.reshape((N, 1))
+    e = np.exp(-2j * np.pi * k * n / N)
+    return np.dot(e, x)
+
+# 定义逆离散傅里叶变换
+def idft(X):
+    N = len(X)
+    n = np.arange(N)
+    k = n.reshape((N, 1))
+    e = np.exp(2j * np.pi * k * n / N)
+    return np.dot(e, X) / N
+
+
+def dft_process(image ,save_path, show: bool=False):
+    image = image.convert('RGB')
+    image_array = np.array(image)
+    img_gray = cv2.cvtColor(image_array, cv2.COLOR_RGB2GRAY).astype('float')
+    # 进行离散傅里叶变换
+    dft_result = dft(img_gray)
+    # 将频域图像进行有损压缩
+    rows, cols = img_gray.shape
+    crow, ccol = rows // 2, cols // 2
+    dft_result[crow - 30:crow + 30, ccol - 30:ccol + 30] = 0
+    # 进行逆离散傅里叶变换
+    img_back = idft(dft_result)
+    result = it.fromarray(img_back.real.astype(np.uint8))
+    it.save_image(result, save_path)
+    if show:
+        it.compare_image_show(image_array, img_back.real.astype(np.uint8))
+    print('DFT压缩完成')
 
 if __name__ == "__main__":
 
@@ -215,4 +251,5 @@ if __name__ == "__main__":
     # huffman_process(image, save_path, show=True)
     # lzw_process(image, save_path, show=True)
 
-    dct_process(image, save_path, show=True)
+    # dct_process(image, save_path, show=True)
+    dft_process(image, save_path, show=True)
