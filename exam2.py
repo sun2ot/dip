@@ -274,7 +274,7 @@ def histogram_eq(input_image, save_path: str, show: bool = False):
     """
     input_image = input_image.convert('L')
 
-    image = np.array(input_image)  # 这里假设你有一张灰度图像
+    image = np.array(input_image)
 
     # 计算直方图
     histogram, bins = np.histogram(image.flatten(), 256, [0, 256])
@@ -300,6 +300,7 @@ def linear_smoothing_filter(image, kernel_size, save_path: str, show: bool = Fal
     :param kernel_size: 滤波器大小(太大会很慢很慢,推荐3-5)
     """
     width, height = image.size
+    # 卷积核中心像素到边界像素的距离
     border = kernel_size // 2
 
     smoothed_image = Image.new('RGB', (width, height))

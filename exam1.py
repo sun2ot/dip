@@ -17,8 +17,10 @@ def save_image(image, file_path):
 def quantize_image(image, levels):
     """
     将图像进行灰度级量化
-    image: 输入的图像对象
-    levels: 灰度级数量（16、64或128）
+    
+    - image: 输入的图像对象
+    - levels: 灰度级数量（16、64或128）
+    
     返回量化后的图像对象
     """
     if levels not in [16, 64, 128]:
