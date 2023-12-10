@@ -11,6 +11,8 @@ NMU 数字图像处理作业
 
 # 环境部署
 
+> 防呆不防傻，请执行下述指令时，保证计算机具有Python环境
+
 ```
 cd dip
 pip install -r requirements.txt 或者 conda install --file requirements.txt
