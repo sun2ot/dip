@@ -243,10 +243,10 @@ def process_image():
             e8.closing(image, save_path)
         elif fid == 46:
             # 边界提取
-            e8.boundary_extract(image, save_path)
+            e8.boundary_extraction(image, save_path)
         elif fid == 47:
             # 区域填充
-            e8.region_fill(image, save_path)
+            e8.region_filling(image, save_path)
         elif fid == 48:
             # 灰度不连续分割
             e9.rgb_image_segmentation1(image, save_path)
