@@ -237,10 +237,10 @@ def process_image():
             e8.erode(image, save_path)
         elif fid == 44:
             # 开操作
-            e8.open(image, save_path)
+            e8.opening(image, save_path)
         elif fid == 45:
             # 闭操作
-            e8.close(image, save_path)
+            e8.closing(image, save_path)
         elif fid == 46:
             # 边界提取
             e8.boundary_extract(image, save_path)
