@@ -1,6 +1,6 @@
 ## Warning
 
-`exam8.py` 有 bug，但是已经考完了，懒得修了。
+~~`exam8.py` 有 bug，但是已经考完了，懒得修了。~~ 已修复 2023-12-28
 
 ## Introduction
 
